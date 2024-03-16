@@ -1,0 +1,39 @@
+Replicaset or replica controller both are one of the controllers in kubernetes.
+Controller is kubernetes are the main mind of the kubernetes where. When we need to create a new pod for HA purpose it will create a new pod. It will run based on the rules set by us
+
+Replicaset is the new recoomended . As replicataion controller is older technology purpose is same but they are not same
+
+REplicaset properties
+apiVersion
+kind
+metadata
+spec:
+  - template   | Under template we need to give the  POD yaml code like Below, template,replicas and selecto 3 sibilings
+      metadata:
+        name: nginxv2
+        labels:
+          env: dev
+      spec:
+        containers:
+          - name: nginxv2
+            image: nginx  
+  replicas: 3   | replicaset will set the pods in 3
+  selector:
+    matchLabels:   | we should mention label of the pods even when we wrote the metadata of the pod in the same definition file. Even if there are already 3 pods presetn with node we need to mention it as if any pod die it will re create it by using the pod definition
+      env:  dev
+
+
+labels used in pod and selector shoudl be same as env: dev is ame on both selector and template of the pod
+
+To update number of replicas in defnition 
+kubectl replace -f repli.yml  | after updating the file with desired state or update the replicaset according to new changes that we have done 
+kubectl scale -replica=6 -f repli.yaml  | cli command to change it 
+
+
+kubectl explain replicaset to check the apiVersion details and others.
+
+kubectl create is what we call Imperative Management. In this approach, you tell the Kubernetes API what you want to create, replace or delete, not how you want your K8s cluster world to look like.
+
+Declarative Management
+
+kubectl apply is part of the Declarative Management approach, where changes that you may have applied to a live object (i.e. through scale) are "maintained" even if you apply other changes to the object.

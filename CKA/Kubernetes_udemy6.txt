@@ -1,0 +1,101 @@
+Cluster Maintainence:
+If our node is down for any reason the pods that are deploye din the nodes can be created in other nodes if the node is down more than the defined time if the pod is mentioned in repolica set
+If any pod is deployed in node wwhich is not mentioned in the replica set we can use the drain command to deploy all the pods in that node to other nodes
+kubectl drain node1
+
+We can also mention to deploy any pods in any particular node if the nodes are in Maintainence using cordain command
+kubectl cordan node1
+To schedule the pods again in node1
+kubectl uncordon node1
+
+
+Backup of cluster:
+WE can Backup the cluster by 3 wways:
+1. Storing the manifest files i nrepositorty
+2. saving all the manifest files in 1 yaml from api-server
+3. Creating the backup of th etcd database and restore it if we need
+
+NEED TO LEARN DIFFERENCE BETWEEN CONTEXT AND NAMEPSACE
+Name space is different environments in the same cluster
+context is to assign a particular cluster to the user we can also asssign the default name space for that cluster to that user.
+We can assign all those in the kube config configuration file 
+
+SECURITY
+
+Kubeconfig:
+We can define  context, clusters, users and assign the what user can have the what cluster. Also we can set default context i.e what user can access the what cluster
+
+To see the current context usingthe kube config file path
+kubectl config --kubeconfig=/root/my-kube-config current-context
+To set the current context using the config file path
+kubectl config --kubeconfig=/root/my-kube-config use-context research
+
+Api Groups:
+All the resources of k8s are in API groups 
+There are multiple API gorups so that we can curl those of the kube API and check the details like health and versions.
+They are categorized into 2  -> core  and named
+Also just like portals only certain user can access some of the apis. For that we need to get pass the user certificates
+
+Authorization:
+Default is root authorization any one can do anything. To restrict that we have multiple authorization --> node, ABAC,RBAC and Webhook
+RBAC authorizer: IT is standard authorization
+For RBAC we need to first the create role and then Role binding resources by using the YAML file.
+As similar to and PODS and deployments we can just assign the specific user and specific roles that user in the ROle binding yaml file also we can specifiy the name space too.
+We can restrict access to seperate resources in the roles
+kubetctl get roles --> for exisitng roles
+kubetctl get rolebindings --> for exisitng rolebindings
+we can also describe them 
+Check Access:
+kubectl auth can-i create deployments --> we can check the access for us and also for other users
+
+Role and rolebindings will create in namepaces only. Where as clusterrole and clusterbindings will create in the whole cluster
+
+Service accounts
+wE CAN CREATE service so that other tools or other API's can use the services in kubernetes
+
+Image security:
+We can create a secrets for image registries credentials 
+
+Security contexts: 
+which is nothing but we can set a proccess to run as seperate user in pod. We can specificy specific set of rules if we want to that user.
+
+Network policies:
+In a cluster every pod is able to connect to every other pods. IF we want to restrict 1 pod has to ingress from only certain type of pods we can create such rules using network policies or allowing traffic from only API to database pod.
+There are two types of network policies: 
+we can set the rules in the ingress or egress i nnetwork policy and attach them to a pod by match label selector or namepace selector even with ip address
+    ingress: allowing incoming traffic
+    egress : sending traffic out other pod or external 
+
+Kubectx and Kubens – Command line Utilities
+Through out the course, you have had to work on several different namespaces in the practice lab environments. In some labs, you also had to switch between several contexts.
+While this is excellent for hands-on practice, in a real “live” kubernetes cluster implemented for production, there could be a possibility of often switching between a large number of namespaces and clusters.
+This can quickly become and confusing and overwhelming task if you had to rely on kubectl alone.
+This is where command line tools such as kubectx and kubens come in to picture.
+
+Reference: https://github.com/ahmetb/kubectx
+
+Kubectx:
+With this tool, you don't have to make use of lengthy “kubectl config” commands to switch between contexts. This tool is particularly useful to switch context between clusters in a multi-cluster environment.
+Installation:
+sudo git clone https://github.com/ahmetb/kubectx /opt/kubectx
+sudo ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx
+Syntax:
+To list all contexts:
+kubectx
+To switch to a new context:
+kubectx <context_name>
+To switch back to previous context:
+kubectx -
+To see current context:
+kubectx -c
+
+Kubens:
+This tool allows users to switch between namespaces quickly with a simple command.
+Installation:
+sudo git clone https://github.com/ahmetb/kubectx /opt/kubectx
+sudo ln -s /opt/kubectx/kubens /usr/local/bin/kubens
+Syntax:
+To switch to a new namespace:
+kubens <new_namespace>
+To switch back to previous namespace:
+kubens -

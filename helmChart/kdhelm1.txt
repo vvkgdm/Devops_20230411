@@ -1,0 +1,29 @@
+Overview:
+It gives you k8 manifest files templates 
+helm repo:
+It connects to the helm repo i.e bitnami. Bitnami  is the repo for the helm charts
+
+Artifact.io is the repo for helm charts but in this we can get helm charts from different organisttion aswell
+--> helm repo list
+
+# Add Helm Repository
+helm repo add <DESIRED-NAME> <HELM-REPO-URL>
+helm repo add mybitnami https://charts.bitnami.com/bitnami
+
+we can search repos by using below commmand
+helm search repo:
+
+After adding the repo by using that repo we can deploy the services without writing manifest files by using below command
+helm install nginx mybitnami/nginx
+It will directly install pods and services aswell
+
+
+TO remove the k8 objects which were created using:
+helm uninstall mynginx
+
+
+# Install myapp1 Helm Chart
+helm install <RELEASE-NAME> <repo_name_in_your_local_desktop/chart_name>
+helm install myapp1 stacksimplify/mychart1 
+
+helm ls is to get list of the objcts created by the helm

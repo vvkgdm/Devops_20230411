@@ -1,0 +1,69 @@
+Scheduling:
+
+Manual Scheduling:
+Scheduler is the component which helps kubernetes decide on which node do we need to create pod or development etc
+if we dont have the scheduler process runniong or scheduler pod is not running then if we try to crete the pod it will not creat the ppod and pod will be in the pending state
+
+Even if the scheduler is not there in we can scheudler it manually which is by mentioning the nodeName in the manifest file . 
+
+When scheduler is installed this is how scheduler workls Kubernetes internally creeates that nodeName property in the kubernetes own mainfest file even though if we dont mention the nodeName property
+and deploy it in that node 
+
+Taints and toleration:
+Taint is like the repellent feature if we set a taint to any node then when we schedule a pod to create pod in any node it wil not create a pod in the repellent added node
+if we add any tolerant to pod definition file then only we can create a pod in that node
+In kubernetes master node taint was already set so that no pods can be deployed in master node
+There 3 types of taints, NoExecute
+                         NoSchedule
+                         PreferNoSchedule
+To taint a node node01 
+kubectl taint nodes  node01  spray=mortein:NoSchedule
+
+To overwrite the taint
+kubectl taint nodes  node01  spray=mortein:NoSchedule     --overwrite=true
+
+To remove taint
+kubectl taint nodes  node01  spray=mortein:NoSchedule-  (minus)
+
+Labeling and Selecting:
+Labels and Selectors:
+We  use labels  to classify the object like  giving them tags  labeling them. if we are creating the development related pods rs and deployments we can label them in the metadata 
+we can select them by using the label development
+Labeling scheduling that meaans by giving the labeling in the deployment manifest files we can assign deplopyments on which node  it should deployed
+For example:
+If we label the node  as  large as below
+kubectl label  nodes node01 size=large
+We need to mention deplymnet manifest files of the labels where size is large or we can give multiple labels
+currenlty there are 2 types labeling node affinity are there
+
+requiredDuringSchedulingIgnoredDuringExecution
+Means it will only deploy the pods only if the labels are matched
+preferredDuringSchedulingIgnoredDuringExecution
+It makesure the pods or deployments are deplyed in node even though the labels are not matched
+
+we need to add this on the pod section of the spec section as below
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+  spec:
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: disktype
+              operator: In
+              values:
+              - ssd            

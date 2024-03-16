@@ -1,0 +1,62 @@
+Kuber-APi server
+Similar to etcd we can install it manualy by downloading binaries or if we buiilt the cluster from the kubeadm it will created as the pod
+
+it is brain of the cluster. It talks to every component of the kubernetes architecture
+If we kubectl apply command to create a new pod 
+kube-api server talks to etcd and stores information of new pod defintion and etcd gives back update to kube-api server
+Then controller chccks if anything new pod need to be created then communicates it kube-api server 
+then kube-api server talks to scheduler to talk to work node to create pod by using kubelet
+
+
+For communcation with other compnonets like etcd we need to mention ip and certs details in the .service file of kube-api server 
+
+Kube-Controller-manager:
+ Similar to etcd we can install it manualy by downloading binaries or if we buiilt the cluster from the kubeadm it will created as the pod
+
+ By default it will comes with so manay controllers like, and by default wvery controller will be enabled we can disable some of them in  .service file
+            -replicaset
+            -stateful set
+            - cronjob
+            - depoyments
+            - garbage collector
+            - service
+            etc
+
+kubelet: ther are not gonna get instaled even wehen we created the cluster from kubeadm we need to install manually
+
+Kube-proxy:
+It was intalled on every node. It checks for any service like nodePort or clusterip is created and according to that creates rules by using iptables
+
+
+Namepaces:
+Namepsace is like environment
+when we've enter any kubectl command in cli it executes on the default namespace 
+we can change name space to execute in namespace for example if we're in dev namepsace we will get details of dev related pods and others
+we can also limit the quoate of the resources for the specific namepace env  in the yaml definition file
+to create namspace we need to create it in yaml file
+
+PODS and SERVICES can directly if they are in same namespace
+If we want to connect 1 pod from dev namespace to different namespace the we need to connect as below
+ds-service-dev.svc.cluster.local
+
+apiVersion: v1
+kind: namespace
+metadata: 
+  name: dev   -> here dev is the nmme of the namepsace
+or kubectl create namepace dev --> dev is the desired namepsace
+
+kubectl get pods --namespace=dev --> get the pods of dev namepsace
+        or
+kubectl get pods --n=dev
+
+kubectl get pods --all-namespace --> get the pods of all namepsaces
+        or
+kubectl get pods -A        
+to permenantely change the namespace
+kubectl config set-context $(kubectl config current-context) --name=dev
+here   $(kubectl config current-context) is current namepace
+--name=dev desire namepsace
+
+
+
+

@@ -1,0 +1,71 @@
+Storage:
+
+Docker volumes:
+we're using the mounts becasue when containers are up they will write the changes inthe container itself. But when containerswere destroyed written deata will get deleted. So we use mounts outside container
+Where will be written outside container even if we destroy the container data will not get destroyed along wiht container.
+
+There are 2 types volumes in Docker 
+1. volume mount (mount the external storage into the docker by volume)
+Volumes need to created or will be created at the runtime. They were created at the docker directory in the volumes directory
+2. bind mount mount the external storage into the docker by bind
+If we've addtional storage attached to the server. we can mount into the container as the bind mount
+
+Volume drivers: 
+There are mutliple volume providers . we can host EBS as volume and use rexray as volume provider and use it as docker volumes
+
+CSI:
+There are multiple continaer run time interfaces: rkt, docker, cri-o. For Kubernetes to work on all the container run time interfaces. They introduced CRI 
+Same goes with NEtworking solutions like weaveworks flannel cilium. They introduced CNI
+Same goes with Storage solution like AWS EBS, DELL EMC , GlusterFS. They intrdouced CSI .Container storage Interface
+
+Volumes in Kubernetes:
+In POD manifest file we will mention volumes in voume section and volume path selection. we can mention any storage interfaces in the POD manifest file like EBS, NFS etcd
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pv-recycler
+  namespace: default
+spec:
+  restartPolicy: Never
+  volumes:
+  - name: vol
+    hostPath:
+      path: /any/path/it/will/be/replaced  (server path)
+  containers:
+  - name: pv-recycler
+    image: "registry.k8s.io/busybox"
+    volumeMounts:
+    - name: vol
+      mountPath: /scrub  (container path)
+
+Peristent Volumes: 
+These are like creating the partitions in the whole storage for particular set of PODS. So that it will write only on that  chunk of the PArtition. We can set REad write configuration 
+and also we can set the size of the partition
+
+Persistent Volume Claim:
+These are the configurations that we can mention how much pod is gonna take the storage. we can attach that claim to the POD it selft. IF the Persisten volume contains this requirements. 
+That partiton of the persistent volumes will be attached to pod.
+
+Before we attach the claim to the  POD we need to create myclaim peristent voolume claims.
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+    - name: myfrontend
+      image: nginx
+      volumeMounts:
+      - mountPath: "/var/www/html"
+        name: mypd
+  volumes:
+    - name: mypd
+      persistentVolumeClaim:
+        claimName: myclaim
+  
+Storage class:
+If we want to use the Peristent Volumes fromany cloud provider. We need to create storage and use that as the PV and we persistentVolumeClaim that. What if we want to create Persistent volume to create it manually.
+Whenever we need to create a Disk dynamically from the kubernetes itself we use storage class. We need to create storage class object then it will crete the storage on cloud and also PV on its own.
+we can also mention what type of storage class do we need SSD or HDD or replication process for that storage etc.

@@ -1,0 +1,85 @@
+Daemon Sets:
+Kube-proxy must be in every node. So They can be deployed as daemon. Daemon node ensures every node has a pod
+Creating a deamonis manifest file is similar to replica set
+
+StaticPods:
+Static pods can be created even if there are no kube-api server, shceduler,controller. we can still spin up a pod with using kubelet. 
+we cannot creat deployments or rs ,. We can just directly place the manifest file in alocation so that it will automatically create the pod using it.
+we can create kuberentes related components by using statio pods by doing that we dont have to think about binareis and dependencies of the components
+WE can create the pod by placing them in the manifest file location which we can discover on the configurtation.yaml file  path is /var/lib/kubelete/config.yaml
+
+Difference between Deamon sets and Static pods:
+Static pod:                             Daemon Set:
+created by kubelet                      created by the kube-api server
+Deploy control plane compnents as       Deploy monitroing agents, Logging agents on nodes
+static pods
+Both were ignored by the kube-scheduler
+
+Mutliple Schedulers:
+we can write our own scheduler program and we can assign it to the pods
+
+
+Logging monitoring:
+
+For Monitoring cluster we need to deploy metrics-server to monitor the PODs and Nodes as below
+git clone https://github.com/kodekloudhub/kubernetes-metrics-server.git
+kubectl apply -f  kubernetes-metrics-server/.
+kubectl top node
+
+Fro application logs we need to write a yaml file for event-simulator.yaml
+then we can tail the logs as below
+kubectl logs -f even-simulator-pod <pod name>
+
+Application lifecyle management:
+
+Configuring applications comprises of understanding the following concepts:
+
+Configuring Command and Arguments on applications
+command: ["sleep"] 
+args: ["5000]
+
+Configuring Environment Variables
+we will use env for giving env variables. env is an array
+config maps and secrets are the Environment variable we can use
+
+configMaps:
+we can create the configmaps Environment variable with eother definition file or by declarative method after creting it we can use that Environment varibles by injecting in the pod defintion file as below
+
+creating the new configmap file using the yaml or imperative method
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webapp-config-map
+data:
+  APP_COLOR: darkblue
+  APP_OTHER: disregard
+
+refrenecing the newly created confog map in pod manfiest file
+  - env:
+    - name: APP_COLOR
+      valueFrom:
+        configMapKeyRef:
+          name: webapp-config-map
+          key: APP_COLOR
+
+secrets:
+secrets contains the informatioon like db password etc. Similar to the configmaps secrets can be made using yaml file or imperative method and created secre4ts can be injected to the pods in pod manifest
+
+Multi-container Pods Design Patterns
+There are 3 common patterns, when it comes to designing multi-container PODs. 
+The first and what we just saw with the logging service example is known as a side car pattern. The others are the adapter and the ambassador pattern.
+
+initContainers:
+A process that pulls a code or binary from a repository that will be used by the main web application. 
+That is a task that will be run only  one time when the pod is first created. Or a process that waits  for an external service or database to be up before the actual application starts. 
+That's where initContainers comes in.
+An initContainer is configured in a pod like all other containers, except that it is specified inside a initContainers section,
+spec:
+  containers:
+  - name: myapp-container
+    image: busybox:1.28
+    command: ['sh', '-c', 'echo The app is running! && sleep 3600']
+  initContainers:
+  - name: init-myservice
+    image: busybox
+    command: ['sh', '-c', 'git clone <some-repository-that-will-be-used-by-application> ; done;']

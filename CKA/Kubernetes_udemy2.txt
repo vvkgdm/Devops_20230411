@@ -1,0 +1,49 @@
+containerd vs docker
+Docker technologies allow you to interact with the container runtime
+For example, when you execute the following command
+
+docker run nginx
+
+You are using the command-line interface (CLI)  tool, docker. When the command set docker run is invoked, docker tells the container runtime to create a container based on the container image, nginx. Behind the scenes, containerd takes over and downloads the associated container image. Then containerd does the work of creating the container from that image.
+
+The Docker CLI utility accepts the command. Then it figures out what we want to do. After it understands our intention, it passes this intention to the Docker Daemon. This daemon is a separate program (from Docker CLI) that always runs in the background, waiting for instructions. After the Docker Daemon receives our desired action, it tells another app, called a container runtime, to pull in the container image. This container runtime is called containerd.
+
+circtl is kubernetes made cli tool to pull the container from hub instead of docker command
+
+--------
+etcd:
+key value store, distributed reliable key-value store used by kubernetes to store all data used to manage the cluster like nodes, containers informtaion in database like thing 
+
+everything that we create pods or edit the manifest files that will stored in the etcd. untill unless we changed etcd it wont show the changes that we changed
+etcd put name vivek  -> store  name value as vivek in database
+etcd get naem  -> gives us vivek result
+
+
+ETCDCTL is the CLI tool used to interact with ETCD.
+
+ETCDCTL can interact with ETCD Server using 2 API versions - Version 2 and Version 3.  By default its set to use Version 2. Each version has different sets of commands. 
+Before working on etcd  we need to check wherther what version of etcd are we using cause etcd commands differ from version to version
+To set the right version of API set the environment variable ETCDCTL_API command
+
+export ETCDCTL_API=3
+
+you must also specify path to certificate files so that ETCDCTL can authenticate to the ETCD API Server. The certificate files are available in the etcd-master at the following path. 
+
+    --cacert /etc/kubernetes/pki/etcd/ca.crt     
+    --cert /etc/kubernetes/pki/etcd/server.crt     
+    --key /etc/kubernetes/pki/etcd/server.key
+
+IF we  install etcd on master from sracth etcd run as seperate service and where as if we create cluster from kubeadm then etcd run as cluster
+defautl port: 2379
+ in etcd.service we need to mention the ip and port where it is running
+In High availablity  environment  we will have multiple master so we need to mention all thee ips annd ports in etcd.service
+etcd role kubernetes:
+It stores informtaion  - nodes
+                       - pods
+                       - configs
+                       - secrets
+                       - accounts
+                       - roles
+                       - bindings
+                       - others
+

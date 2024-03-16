@@ -1,0 +1,39 @@
+EKS storage:
+EBS CSI driver
+EFS CSI driver 
+CSI is container storage interface
+
+EBS: Elastic block store 
+It provides block level storage for btoth  EBS and containers. 
+we can change the size of the storage, we can set lifecylce of the storage
+
+Probes:
+In Kubernetes we've 3 types of probes - Liveness Probes, Readiness Probes , Startup  Probe
+Liveness Probes:
+kubelet uses Livenessprobes to know when to restart the container
+It will help us when the appliation is in deadlock state. Where the possible solution to this is to restart the container
+Readiness Probe:
+In This type probes, kubeletes check whether container is ready for the traffic or not
+If the pod is not ready for the traffic this probe helps in taking thath pod out of the Service load balancers list
+Startup Probe:
+Kubelet uses this probe to know when this container is restarted or started
+This probe disables other two probes. So that those probes wont able to restart the application. This can be helpful when any application is a slow starter
+
+
+RDS:
+Why we need RDS is that even though we have stateful sets for the DBs in Kubernetes. we cant upgrade it or we can't maintain it and we need to give  datadir for mysql as the persistent volume  for all the containers  in the stateful set if it is in AWS we will use EBS
+EBS is only AZ specific we can't maintian EBS in whole region and due to thath HA will not be maintained.
+
+We need to create RDS subnet groups i.e privvate subnets as the subnet group for the RDS instance. So that no outside traffic
+Also we need to create security group in that VPC to allow the mysql port 
+So to connect our application container or pod to RDS intsance in AWS we need to use another service Extername service. Instead of the type Loadbalancer or clusterip we ned to give Extername as below
+This Service will connect from Kubernetes to RDS instance directly.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  type: ExternalName
+  externalName: usermgmtdb.cxojydmxwly6.us-east-1.rds.amazonaws.com #RDS instance name
+

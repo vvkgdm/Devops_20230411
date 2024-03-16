@@ -1,0 +1,51 @@
+When we install kubernetes in our server then we will install following  things along with install
+    - API server (front end for kubernetes, manager of the scheduler,controller,etcd)
+    - etcd (key value store, distributed reliable key-value store used by kubernetes to store all data used to manage the cluster like nodes containers informtaion in database its a database)
+    - Scheduler (distribution of work to container or nodes)
+    - Controller (makes decisions to bring up new container i.e node-controller, replication-controller and control manager)
+    - Container runtime (docker)
+    - kubelet (runs on each node)
+
+    worker nodes:
+    docker engine are present in worker nodes
+    kubelet will there in worker node, worker nodes communicates with master by using kubelet or kuber-proxy
+    Master nodes:
+        contains kube-apiserver, etcd, controller, scheduler
+        kube-apiserver process runs on the master node
+    Kubectl: cli tool for kubernetes
+
+    kubectl run hello-minikkube
+    kubectl get nodes
+    kubectl cluster-info
+
+POD: encapsultaion of the container. We cannot maintain same container in single POD, buyt single pod can container dfifferent containers
+A Pod (as in a pod of whales or pea pod) is a group of one or more containers, with shared storage and network resources, and a specification for how to run the containers
+kubectl run mission --image=nginx
+kubectl get pods
+kubectl describe pod mission
+kubectl get pods -o wide
+
+Kubernetes Yaml properties:
+Below properties are must/require in the kubernertes yaml file
+apiVersion: version of pods, replicaset,service etc
+kind: Object details like pod,service etc
+metadata: Details of the object details should be here like name and labels. we should add details that are Only expected by kubernetes under metadata. 
+          But under labels we can add
+spec: This should ne unique for  every object
+
+Simple POD yaml file:
+
+apiVersion: v1   ---------> string
+kind: Pod  (p capital in pod) ---------> string
+metadata:
+  name:            |dictonary, So everythinng under metadata is children and name and labels are sibling so same spaces infront also need to have more spaces than parent 
+  labels:          |Here labels is also dictonary, app got space infront,
+    app: myapp
+    type: front-end |we're giving a tag for this object so that we can call it in another object if we can or we can group other objects together     | 
+spec:               | Spec is also dictonary
+  containers:       | Container is list here
+    - name: nginx-app
+      image: nginx
+
+
+

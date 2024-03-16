@@ -1,0 +1,9 @@
+NodePort:
+Nodeport helps us to see the webapp  which was deployed in the pod. 
+In nodeport service==>  targetport is port of the container is hosting
+                        port is simply port of the service object in this case nodeport
+                        clusterip is ip o fthe service
+                        nodeportis the port which we can able to see the webapp  and range starts from 30000 to 32767
+
+ClusterIP : For all the cluster like node cluster and pod cluster we create a network so  that they can talk each other when we dont mention type of service in manifest file default is this
+LoadBalancer: This is used when we we're hosting the kkubernetes on hosted service likle gke, aeks, aks. So that we dont have give the ip and port to use that

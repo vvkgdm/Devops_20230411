@@ -1,0 +1,19 @@
+We use deplyments in the production environment. When we use the deployment it will update the containers with new code one by one
+Deployment holds the high hierarchy here
+Deplyments is same as the replica set but it can control update the container with new code. like updating pasuing reverting the new code in pod contianres
+when we create deploymment using yaml file --> it wil create a replica set--> that newly created repicaset creates pods eventually
+
+We can update the container with 2 strategies in deployment :  recreate--> destroy pods and re-create new pods with new container i.e scaling down to 0 and scaling upto desired replicas
+                                                                upgrade --> Create a new replica set and killing 1 pod at a time in orginal replica set and creating new pod in  new replica set
+
+We need to mention the strategy of before doing the update
+
+We can rollback the update by  
+to update new version:
+kubectl apply -f depl.yaml
+
+To check the rollout status:
+kubectl rollout status deployment/myappname
+
+TO undo the rollout:
+kubectl rollout undo deployment/myappname
