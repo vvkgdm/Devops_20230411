@@ -1,0 +1,24 @@
+There are multiple providers for the terraform
+
+resource local_file "name1" {
+    filename="textfile"
+    content="textfile content"
+}
+On the above local_file  --> local is resource provider name and file resource provier name and name1 is what we're assigning the name to 
+
+Main file should always be main.tf and variables should be always variables.tf
+
+variables file:
+variables name {
+    type=string
+    filename="valueoffilename"
+
+}
+we can assign the above variables as below
+resource local_file "name1" {
+    filename=var.name.filename
+    content="textfile content"
+}
+There are multiple varibles in terraform string, we need to mention them as type 
+main types of varibles string, number, list, map(key value storing)
+If we dont mention the defautl value in varibles.tf file then we will have 

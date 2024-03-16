@@ -1,0 +1,22 @@
+In AWS Route53 is to register a domain and certificate manager is for generating SSL certificate
+In AWS we can directly assign the SSL created from the certificate manager and assign it to the domain  very easily
+ 
+
+---------------
+Fargate:
+Fargate is serverless compute platform for containers on AWS
+EKS integreates kubernetes with fargate using controllers upstream ,extensible model provided by kubernetes
+These controllers  run as part of the EKS managed kubernetes control plane and are responsible for  scheduling native kubernters pods in to the fargate
+
+
+IN Fargate if we deployd a pod it will acts as the one FARgate ec2 instance
+Fargate only uses the resource which it needs on demand
+IT is highly secured.
+Fargate  got some limitaions --> pods can only be deployed private subnet 
+
+We can deploy the EKS using three options  only EC2 option, Fargate option , Mixed option
+
+To deploy the PODS in fargate we need to create a fargate profile first and compulsory we need to mention resource information for farget related pods deployments
+
+Ingress with cross namespaces is not allowed
+
