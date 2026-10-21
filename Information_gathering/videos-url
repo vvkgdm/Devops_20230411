@@ -1,3 +1,26 @@
 https://www.youtube.com/watch?v=qgZ1IQFF_KY&list=PLFDE9_ouCqJA-dyOEbqFaFu68FMZRwS0T
 https://www.youtube.com/watch?v=rA8mXYTU0W8&list=PLvZb3tGyqC1TOasSaN36haM5xlCxHQBlA&index=6
 https://www.youtube.com/watch?v=j5HIzz50xuU&list=PLwLVd7myqCJuUQRAS4NCia8FBcLZ8cTVP&index=4
+
+
+----
+https://kevops-cka-dojo.vercel.app/#/
+
+--
+https://argoproj.github.io/argo-helm
+---
+net.bridge.bridge-nf-call-iptables
+net.bridge.bridge-nf-call-ip6tables
+net.ipv4.ip_forward
+sysctl --system
+---
+br_netfilter
+overlay
+lsmod
+modprobe
+---
+nginx.ingress.kubernetes.io/ssl-redirect="true"
+nfinx.ingress.kubernetes.io/rewrite-target:/
+--
+kustomize.io
+helm.sh
